@@ -54,11 +54,6 @@ class Tabular extends \yii\base\Widget {
     public $skeletonModel;
 
     /**
-     * @var \Closure
-     */
-    public $skeletonRenderer;
-
-    /**
      *
      * @var string
      */
@@ -120,8 +115,8 @@ class Tabular extends \yii\base\Widget {
     }
 
     protected function registerSkeleton() {
-        $params = call_user_func($this->skeletonRenderer, $this->form,
-                $this->skeletonModel);
+        $params = call_user_func($this->itemRenderer, $this->form,
+                $this->skeletonModel, '__index__');
 
         $attributes = [];
 
