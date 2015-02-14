@@ -121,8 +121,9 @@ class Tabular extends \yii\base\Widget {
         $attributes = [];
 
         foreach ($params As $param) {
-            if ($param instanceof ActiveField) {
-                $attributes[] = $param->getPublicClientOptions();
+            if ($param instanceof ActiveField &&
+                    !empty($clientOptions = $param->getPublicClientOptions())) {
+                $attributes[] = $clientOptions;
             }
         }
 
