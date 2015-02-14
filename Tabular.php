@@ -135,7 +135,11 @@ class Tabular extends \yii\base\Widget {
     protected function hasClientOptions($param) {
         if (!($param instanceof ActiveField)) {
             return false;
-        } else if (empty($param->getPublicClientOptions())) {
+        }
+
+        $cOptions = $param->getPublicClientOptions();
+
+        if (empty($cOptions)) {
             return false;
         }
 
