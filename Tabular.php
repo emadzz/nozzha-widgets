@@ -121,15 +121,29 @@ class Tabular extends \yii\base\Widget {
         $attributes = [];
 
         foreach ($params As $param) {
-            if ($param instanceof ActiveField &&
-                    !empty($clientOptions = $param->getPublicClientOptions())) {
-                $attributes[] = $clientOptions;
+            if ($this->hasClientOptions($param)) {
+                $attributes[] = $param->getPublicClientOptions();
             }
         }
 
         $html = strtr($this->template, $params);
 
-        $this->getView()->registerJs("
+        $this->getView()->registerJs($this->getJScript($attributes, $html),
+                $this->jsFunctionPos);
+    }
+
+    protected function hasClientOptions($param) {
+        if (!($param instanceof ActiveField)) {
+            return false;
+        } else if (empty($param->getPublicClientOptions())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function getJScript($attributes, $html) {
+        return "
             function {$this->jsFunction}(index) {
                 var iRegex = /" . preg_quote($this->delimiters['index']) . "/g;
                 var nRegex = /" . preg_quote($this->delimiters['rowNumber']) . "/g;
@@ -149,7 +163,7 @@ class Tabular extends \yii\base\Widget {
 
                 return data;
             }
-        ", $this->jsFunctionPos);
+        ";
     }
 
 }
